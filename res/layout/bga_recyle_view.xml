@@ -1,0 +1,24 @@
+<com.coder.pullrefresh.refreshlayout.MRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/refreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_F"
+    android:orientation="vertical">
+
+    <!-- 内容控件 -->
+
+    <include
+        android:id="@+id/refreshView"
+        layout="@layout/v_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+</com.coder.pullrefresh.refreshlayout.MRefreshLayout>
+
+
+    <!-- 内容控件 -->
+

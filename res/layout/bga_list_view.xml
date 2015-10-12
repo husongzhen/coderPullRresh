@@ -1,0 +1,27 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.coder.pullrefresh.refreshlayout.MRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 内容控件 -->
+
+        <mobile.musikid.com.musikid.framwork.view.scrollview.MListView
+            android:id="@+id/refreshView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </mobile.musikid.com.musikid.framwork.view.scrollview.MListView>
+
+
+    </com.coder.pullrefresh.refreshlayout.MRefreshLayout>
+
+</merge>
+
+
+

@@ -3,9 +3,7 @@ package com.coder.pullrefresh.refreshlayout;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.coder.pullrefresh.refreshlayout.lib.BGAMoocStyleRefreshViewHolder;
 import com.coder.pullrefresh.refreshlayout.lib.BGARefreshLayout;
-import com.coder.pullrefresh.refreshlayout.lib.BGARefreshViewHolder;
 
 /**
  * 作者：husongzhen on 15/7/29 12:47 邮箱：husongzhen@musikid.com

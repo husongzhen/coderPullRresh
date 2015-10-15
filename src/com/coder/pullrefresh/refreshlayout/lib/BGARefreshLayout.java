@@ -19,6 +19,7 @@ package com.coder.pullrefresh.refreshlayout.lib;
 import java.lang.reflect.Field;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.coder.pullrefresh.util.CodeCheck;
 import com.nineoldandroids.animation.ValueAnimator;
 
 /**
@@ -41,6 +43,13 @@ import com.nineoldandroids.animation.ValueAnimator;
  * 描述:下拉刷新、上拉加载更多、可添加自定义（固定、可滑动）头部控件（例如慕课网app顶部的广告位）
  */
 public class BGARefreshLayout extends LinearLayout {
+
+
+    private static final int[] ATTRS = new int[]{
+            android.R.attr.listDivider
+    };
+
+
     private static final String TAG = BGARefreshLayout.class.getSimpleName();
 
     private BGARefreshViewHolder mRefreshViewHolder;
@@ -132,6 +141,13 @@ public class BGARefreshLayout extends LinearLayout {
 
     public BGARefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+
+        final TypedArray a = context.obtainStyledAttributes(ATTRS);
+        dividerHeight = a.getDrawable(0).getIntrinsicHeight();
+        a.recycle();
+
+
         setOrientation(LinearLayout.VERTICAL);
         mHandler = new Handler(Looper.getMainLooper());
         initWholeHeaderView();
@@ -367,9 +383,23 @@ public class BGARefreshLayout extends LinearLayout {
 
         if (manager instanceof LinearLayoutManager) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) manager;
-            if (layoutManager.findLastCompletelyVisibleItemPosition() == mRecyclerView
-                    .getAdapter().getItemCount() - 1) {
-                return true;
+            int lastPosition = layoutManager.findLastVisibleItemPosition();
+            if (layoutManager.getChildCount() != 0 &&
+                    layoutManager.findLastCompletelyVisibleItemPosition() == mRecyclerView
+                            .getAdapter().getItemCount() - 1) {
+                mRecyclerView.getChildAt(lastPosition);
+                View lastView = layoutManager.findViewByPosition(lastPosition);
+                if (!CodeCheck.isNotNull(lastView)) {
+                    return false;
+                }
+                int top = lastView.getTop();
+                int bottom = lastView.getBottom();
+                int vHeight = bottom - top;
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) lastView.getLayoutParams();
+                if (vHeight >= lastView.getMeasuredHeight()
+                        && mRecyclerView.getMeasuredHeight() - dividerHeight <= bottom + params.bottomMargin) {
+                    return true;
+                }
             }
         } else if (manager instanceof StaggeredGridLayoutManager) {
             StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) manager;
@@ -981,9 +1011,6 @@ public class BGARefreshLayout extends LinearLayout {
 
     /**
      * 开始刷新，通常用于调用者主动刷新，典型的情况是进入界面，开始主动刷新，这个刷新并不是由用户拉动引起的
-     *
-     * @param smoothScroll 表示是否有平滑滚动，true表示平滑滚动，false表示无平滑滚动
-     * @param delayMillis  延迟时间
      */
 //
     public void doPullRefreshing() {
@@ -993,6 +1020,15 @@ public class BGARefreshLayout extends LinearLayout {
                 beginRefreshing();
             }
         }, SCROLL_DURATION);
+    }
+
+
+    //    add
+    private int dividerHeight = 0;
+
+
+    public void setRecylerViewDividerHeight(int dividerHeight) {
+        this.dividerHeight = dividerHeight;
     }
 
 
